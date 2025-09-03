@@ -1,20 +1,12 @@
 // Działa to na starszej wersji node-fetch@2
+const request = require('request');
 
-// http://numbersapi.com/random/year?json
+// 'https://api.nbp.pl/api/exchangerates/rates/a/${code}/?format=json'
 
-const fetch = require('node-fetch');
+const validCodes = ['usd', 'eur', 'chf', 'gbp', 'jpy'];
 
-const year = process.argv[2] || Math.floor(Math.random() * 2020);
-const url = `http://numbersapi.com/${year}/year?json`;
+const code = (process.argv[2] || 'usd').toLowerCase();
 
-console.log(year);
-console.log(url);
+const url = `https://api.nbp.pl/api/exchangerates/rates/a/${code}/?format=json`;
 
-fetch(`http://numbersapi.com/${year}/year?json`)
-  .then(response => {
-    console.log(response.status)
-    console.log(response.ok)
-    return response.json()
-})
-  .then(data => console.log(data.text))
-  .catch(error => console.log("You fail...", error))
+console.log(url)
