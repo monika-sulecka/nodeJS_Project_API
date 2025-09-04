@@ -1,5 +1,6 @@
 // Działa to na starszej wersji node-fetch@2
 const request = require('request');
+const fs = require('fs');
 
 // 'https://api.nbp.pl/api/exchangerates/rates/a/${code}/?format=json'
 
@@ -20,6 +21,7 @@ const url = `https://api.nbp.pl/api/exchangerates/rates/a/${code}/?format=json`;
 // console.log(url)
 
 request(url, {json:true}, (err, res, body) => {
+    console.log(res.statusCode)
     if (err) {
         console.log('Błąd: ', err);
         process.exit();
@@ -28,4 +30,12 @@ request(url, {json:true}, (err, res, body) => {
         process.exit();
     }
     console.log(`Kurs ${body.code} z dnia ${body.rates[0].effectiveDate} to ${body.rates[0].mid} PLN`);
+
+    fs.appendFile('waluty.txt', `Kurs ${body.code} z dnia ${body.rates[0].effectiveDate} to ${body.rates[0].mid} PLN\n`, (err) => {
+        if (err) {
+            console.log('Błąd zapisu do pliku: ', err);
+        } else {
+            console.log('Zapisano do pliku waluty.txt');
+        }
+    })
 })
